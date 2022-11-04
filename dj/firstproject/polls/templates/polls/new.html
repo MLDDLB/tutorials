@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Create new poll</title>
+    </head>
+    <body>
+        <h1>Create a new poll</h1> 
+        {% if error_messages %}
+            {% for message in error_messages %}
+            <p><b>{{ error_message }}</b></p>
+            {% endfor %}
+        {% endif %}
+        <form action="{% url 'polls:new' %}" method="POST">
+            {% csrf_token %}
+            <input type="text" name="question_text" id="qt" value="{{ question_text }}"/>
+            <label for="qt">Question Text</label><br>
+            <input type="datetime-local" name="pub_date" id="pd" value="{{ pub_date }}"/>
+            <label for="pd">Enter publication date</label><br>
+            <input type="datetime-local" name="end_date" id="ed" value="{{ end_date }}"/>
+            <label for="ed">Enter end date</label><br>
+            {% if choice_list %}
+                <ul>
+                {% for choice in choice_list %}
+                    <li><input type="text" name="choice_list" id="choice{{ forloop.counter }}" value="{{ choice }}" list="choices"/><br/></li>
+                {% endfor %}
+                </ul>
+            {% endif %}
+            <input type="submit" value="Add choice" id="ac" formaction="{% url 'polls:add_choice' %}" formmethod="GET"/>
+            <input type="submit" value="Add"/><br>
+        </form>
+    </body>
+</html>
