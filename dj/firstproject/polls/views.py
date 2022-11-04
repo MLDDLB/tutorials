@@ -1,3 +1,7 @@
+# TODO: Add archive
+# TODO: Add popular
+# TODO: Add hashing to make polls private
+# TODO: Add download
 import datetime as dt
 
 from django.http import HttpResponse, HttpResponseRedirect, HttpRequest
@@ -7,7 +11,7 @@ from django.views import generic
 from django.utils import timezone
 
 from .models import Choice, Question
-from .lib.validators import ValidationStatus, validate_question, validate_choices
+from .lib.validators import ValidationStatus, DataValidator
 
 FORMAT = "%Y-%m-%dT%H:%M"
 
@@ -44,38 +48,38 @@ def index(request):
 
 
 def new(request: HttpRequest) -> HttpResponse:
+    # TODO: Add confirmation view
     if request.method == "GET":
         context = request.GET.dict()
         return render(request, "polls/new.html", context)
 
     if request.method == "POST":
         question_text, pub_date, end_date = request.POST["question_text"], \
-                                            dt.datetime.strptime(request.POST["pub_date"], FORMAT), \
-                                            dt.datetime.strptime(request.POST["end_date"], FORMAT)
+                                            request.POST["pub_date"], \
+                                            request.POST["end_date"]
+        choice_list = request.POST.getlist("choice_list")
 
-        validation_results = validate_question(question_text=question_text,
-                                            pub_date=pub_date, 
-                                            end_date=end_date,)
+        validation_results = DataValidator()
 
-        if validation_results.status == ValidationStatus.OK:
-            new_question = Question(question_text=question_text, pub_date=pub_date, end_date=end_date)
-            new_question.save()
-        elif validation_results.status == ValidationStatus.ERROR:
+        validation_results.validate_question(question_text=question_text,
+                                               pub_date=pub_date, 
+                                               end_date=end_date,)
+        validation_results.validate_choices(choice_list=choice_list)
+
+        if validation_results.status == ValidationStatus.ERROR:
             context = {
                 "question_text": question_text,
                 "pub_date": pub_date,
                 "end_date": end_date,
-                "choice_list": request.POST.getlist("choice_list")
+                "choice_list": choice_list,
+                "error_messages": validation_results.messages,
             }
-            return HttpResponseRedirect(reverse("polls:new"))
+            return render(request, "polls/new.html", context)
 
-        choice_list = request.POST.getlist("choice_list")
-        validation_results = validate_choices(choice_list=choice_list)
-
+        new_question = Question(question_text=question_text, pub_date=pub_date, end_date=end_date)
+        new_question.save()
         for choice in choice_list:
             new_question.choice_set.create(choice_text=choice)
-
-        # add confirmation view
         return HttpResponseRedirect(reverse("polls:index"))
 
 
