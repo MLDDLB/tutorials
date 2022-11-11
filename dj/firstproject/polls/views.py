@@ -1,17 +1,13 @@
-# TODO: Add archive
-# TODO: Add popular
-# TODO: Add hashing to make polls private
-# TODO: Add download
 import datetime as dt
 
-from django.http import HttpResponse, HttpResponseRedirect, HttpRequest
-from django.shortcuts import render, get_object_or_404
+from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
+from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
-from django.views import generic
 from django.utils import timezone
+from django.views import generic
 
+from .lib.validators import DataValidator, ValidationStatus
 from .models import Choice, Question
-from .lib.validators import ValidationStatus, DataValidator
 
 FORMAT = "%Y-%m-%dT%H:%M"
 

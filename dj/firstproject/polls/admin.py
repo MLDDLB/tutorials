@@ -1,13 +1,13 @@
 import typing as tp
-
 from email import message
+
 from django.contrib import admin, messages
 from django.core import serializers
-from django.http import HttpResponse, HttpRequest
-from django.utils.translation import ngettext
 from django.db.models import Model
+from django.http import HttpRequest, HttpResponse
+from django.utils.translation import ngettext
 
-from .models import Question, Choice
+from .models import Choice, Question
 
 
 # Register your models here.

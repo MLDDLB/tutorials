@@ -1,7 +1,5 @@
-from logging.config import valid_ident
-import typing as tp
 import datetime as dt
-
+import typing as tp
 from enum import IntEnum
 
 from django.utils import timezone
