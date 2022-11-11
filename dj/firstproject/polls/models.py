@@ -11,6 +11,9 @@ class Question(models.Model):
     pub_date = models.DateTimeField('date published', default=timezone.now())
     end_date = models.DateTimeField(null=True)
     votes = models.IntegerField(default=0)
+
+    class Meta:
+        indexes = [models.Index(fields=["end_date"])]
     
     def __str__(self):
         return self.question_text
