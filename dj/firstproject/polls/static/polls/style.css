@@ -1,7 +1,24 @@
 li a {
-    color: green;
+    color: black;
 }
 
-body {
-    background: white url("images/background.png") no-repeat;
+.navigation ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    background-color: #333;
+}
+
+.navigation li {
+    float: left;
+    display: block;
+    padding: 8px;
+    font-size: 300%;
+    color: antiquewhite;
+    border: 3px;
+}
+
+.navigation li a:hover {
+    background-color: #111;
 }

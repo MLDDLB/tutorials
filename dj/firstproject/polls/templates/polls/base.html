@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+    {% load static %}
+    <head>
+        <link rel="stylesheet" href="{% static 'polls/style.css' %}"/>
+        <meta charset="UTF-8"/>
+        <title>{% block title%}Default{% endblock %}</title>
+    </head>
+    <body>
+        <div class="navigation">
+            <ul>
+                <li><b>Newest</b></li>
+                <li><b>Archive</b></li>
+                <li><b>Your polls</b></li>
+            </ul>
+        </div>
+        {% block content %}{% endblock %}
+    </body>
+</html>
