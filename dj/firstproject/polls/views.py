@@ -1,5 +1,6 @@
 import datetime as dt
 
+from django.db.models import Q
 from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
@@ -20,7 +21,9 @@ class DetailView(generic.DetailView):
         """
         Exclude any questions that aren't published yet.
         """
-        return Question.objects.filter(pub_date__lte=timezone.now())
+        now = timezone.now()
+        open_polls = Q(pub_date__lte=now) & (Q(end_date__gt=now) | Q(end_date__isnull=True))
+        return Question.objects.filter(open_polls)
 
 
 class ResultsView(generic.DetailView):
@@ -36,11 +39,24 @@ class ResultsView(generic.DetailView):
 
 # Create your views here.
 def index(request):
-    latest_questions_list = Question.objects.filter(pub_date__lte=timezone.now()).order_by("-pub_date")[:5]
+    now = timezone.now()
+    open_polls = Q(pub_date__lte=now) & (Q(end_date__gt=now) | Q(end_date__isnull=True))
+    latest_questions_list = Question.objects.filter(open_polls).order_by("-pub_date")[:15]
     context = {
         "latest_questions_list": latest_questions_list,
     }
     return render(request, "polls/index.html", context)
+
+
+def archive(request):
+    if not request.GET:
+        question_list = Question.objects.filter(end_date__lte=timezone.now()).order_by("-end_date")[:15]
+    else:
+        pass
+    context = {
+        "question_list": question_list,
+    }
+    return render(request, "polls/archive.html", context)
 
 
 def new(request: HttpRequest) -> HttpResponse:
