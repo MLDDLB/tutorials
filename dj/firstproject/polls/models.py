@@ -8,7 +8,7 @@ from django.utils import timezone
 # Create your models here.
 class Question(models.Model):
     question_text = models.CharField(max_length=200)
-    pub_date = models.DateTimeField('date published', default=timezone.now())
+    pub_date = models.DateTimeField('date published', default=timezone.now)
     end_date = models.DateTimeField(null=True)
     votes = models.IntegerField(default=0)
 
