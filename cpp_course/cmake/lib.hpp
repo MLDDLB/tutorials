@@ -1,0 +1,1 @@
+constexpr int sqr(int);
