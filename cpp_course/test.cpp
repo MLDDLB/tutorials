@@ -1,13 +1,15 @@
 #include <iostream>
 
-void foo(int* a)
+void foo(int val)
 {
-	std::cout << "a = " << a << std::endl;
+	std::cout << "foo = " << val << std::endl;
 }
 
 int main()
 {
-	int* a = new int(5);
-	foo(a);
+	int a {4};
+	std::cout << a << std::endl;
+	a = a << 2 << 2;
+	std::cout << a << std::endl;
 	return 0;
 }
