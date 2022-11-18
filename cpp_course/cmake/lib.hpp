@@ -1,1 +1,2 @@
-constexpr int sqr(int);
+int sqr(int);
+

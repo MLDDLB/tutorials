@@ -1,4 +1,4 @@
-constexpr int sqr(int val)
+int sqr(int val)
 {
     return val*val;
 }
